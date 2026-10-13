@@ -1,26 +1,216 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --sunken: #eceef2;
+  --ink: #0e1117;
+  --muted: #5d6372;
+  --line: #e0e3e9;
+  --accent: #2f4bff;
+  --accent-hover: #1f37e6;
+  --accent-soft: #e6eaff;
+  --on-accent: #ffffff;
+  --pop: #c8f53c;
+  --on-pop: #0e1117;
+  --danger: #d92d20;
+  --success: #12804b;
+}
+
+.dark {
+  --bg: #0b0d12;
+  --surface: #13161d;
+  --sunken: #1b1f28;
+  --ink: #eef0f5;
+  --muted: #959bab;
+  --line: #262b36;
+  --accent: #7189ff;
+  --accent-hover: #8a9eff;
+  --accent-soft: #1b2142;
+  --on-accent: #0b0d12;
+  --pop: #c8f53c;
+  --on-pop: #0b0d12;
+  --danger: #f97066;
+  --success: #47cd89;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-pop: var(--pop);
+  --color-on-pop: var(--on-pop);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --font-sans: var(--app-sans);
+  --font-display: var(--app-display);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.6s ease-out both;
+  --animate-hero-zoom: hero-zoom 18s ease-out both;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 2.4s ease-in-out infinite;
+  --animate-drawer-in: drawer-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes hero-zoom {
+    from { transform: scale(1.12); }
+    to { transform: scale(1); }
+  }
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  /* Slides in from the start edge: left in LTR, right in RTL. */
+  @keyframes drawer-in {
+    from { transform: translateX(var(--drawer-from, -100%)); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
   }
 }
 
+/* Font stacks switch per language: the Latin fonts' metric fallbacks (Arial) contain
+   Arabic glyphs, so Arabic must list its own fonts first. */
+html {
+  color-scheme: light;
+  --app-sans: var(--font-manrope), var(--font-tajawal), system-ui, sans-serif;
+  --app-display: var(--font-bricolage), var(--font-alexandria), system-ui, sans-serif;
+}
+html:lang(ar) {
+  font-size: 106.25%;
+  --app-sans: var(--font-tajawal), var(--font-manrope), system-ui, sans-serif;
+  --app-display: var(--font-alexandria), var(--font-bricolage), system-ui, sans-serif;
+}
+html.dark {
+  color-scheme: dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:lang(ar) body {
+  line-height: 1.75;
+}
+
+/* Letter-spacing breaks Arabic letter joining. */
+:lang(ar) [class*="tracking-"] {
+  letter-spacing: 0 !important;
+}
+
+::selection {
+  background: var(--pop);
+  color: var(--on-pop);
+}
+
+/* Scroll reveal: <Reveal> adds .is-in when the element enters the viewport.
+   Children of [data-stagger] come in one after another. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s ease-out,
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  [data-reveal][data-stagger] {
+    opacity: 1;
+    transform: none;
+  }
+  [data-reveal][data-stagger] > * {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(min(var(--i, 0), 10) * 70ms);
+  }
+  [data-reveal].is-in,
+  [data-reveal].is-in[data-stagger] > * {
+    opacity: 1;
+    transform: none;
+  }
+  [data-stagger] > :nth-child(2) { --i: 1; }
+  [data-stagger] > :nth-child(3) { --i: 2; }
+  [data-stagger] > :nth-child(4) { --i: 3; }
+  [data-stagger] > :nth-child(5) { --i: 4; }
+  [data-stagger] > :nth-child(6) { --i: 5; }
+  [data-stagger] > :nth-child(7) { --i: 6; }
+  [data-stagger] > :nth-child(8) { --i: 7; }
+  [data-stagger] > :nth-child(9) { --i: 8; }
+  [data-stagger] > :nth-child(n + 10) { --i: 9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+}
+@utility btn-primary {
+  @apply btn bg-accent text-on-accent shadow-[0_8px_24px_-10px] shadow-accent/60 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent/70;
+}
+@utility btn-pop {
+  @apply btn bg-pop text-on-pop hover:-translate-y-0.5 hover:brightness-105;
+}
+@utility btn-dark {
+  @apply btn bg-ink text-bg hover:opacity-90;
+}
+@utility btn-outline {
+  @apply btn border border-line bg-surface text-ink hover:border-ink;
+}
+@utility btn-ghost {
+  @apply btn text-ink hover:bg-sunken;
+}
+@utility input {
+  @apply w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/70 transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aria-invalid:border-danger;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-medium text-ink;
+}
+@utility card {
+  @apply rounded-2xl border border-line bg-surface;
+}
+@utility eyebrow {
+  @apply inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-accent uppercase;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+    color: black;
+  }
 }

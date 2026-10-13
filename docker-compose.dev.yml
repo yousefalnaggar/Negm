@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: store
+      POSTGRES_PASSWORD: store_dev_password
+      POSTGRES_DB: store
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - store_pg_dev:/var/lib/postgresql
+
+volumes:
+  store_pg_dev:

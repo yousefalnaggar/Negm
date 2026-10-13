@@ -1,0 +1,414 @@
+{
+  "meta": {
+    "description": "Office chairs, desks, gaming chairs and meeting tables, delivered across Egypt. Cash on delivery."
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop all",
+    "about": "About",
+    "contact": "Contact",
+    "shipping": "Shipping & Returns",
+    "cart": "Cart",
+    "menu": "Menu",
+    "close": "Close",
+    "switchLanguage": "العربية",
+    "toggleTheme": "Toggle dark mode",
+    "skip": "Skip to content",
+    "products": "Products",
+    "services": "Services",
+    "contactWhatsapp": "Contact us"
+  },
+  "home": {
+    "eyebrow": "Office & gaming furniture",
+    "title": "Build the setup you deserve.",
+    "subtitle": "Ergonomic chairs, sturdy desks and gaming gear built for long days and late nights. Delivered and assembled anywhere in Egypt. Pay when it arrives.",
+    "cta": "Shop our products",
+    "categoriesTitle": "Shop by category",
+    "featuredTitle": "Customer favourites",
+    "viewAll": "View all",
+    "promises": {
+      "cod": "Cash on delivery",
+      "delivery": "Delivered nationwide"
+    },
+    "whatsapp": "Contact us on WhatsApp",
+    "scroll": "Scroll",
+    "favoritesEyebrow": "Best sellers",
+    "categoriesEyebrow": "Find your fit",
+    "productCount": "{count, plural, =0 {No products} one {# product} other {# products}}",
+    "partnersEyebrow": "Trusted partners",
+    "partnersTitle": "Companies that work on our furniture",
+    "reviewsEyebrow": "Real setups",
+    "reviewsTitle": "What our customers say",
+    "prev": "Previous",
+    "next": "Next",
+    "goTo": "Go to review {n}",
+    "reviews": [
+      {
+        "name": "Omar Khaled",
+        "role": "Software engineer, Cairo",
+        "text": "My back pain was gone after two weeks with the Flex chair. Delivery came on time and they assembled it in ten minutes."
+      },
+      {
+        "name": "Youssef Adel",
+        "role": "Streamer, Alexandria",
+        "text": "The Nebula desk turned my room into a proper battle station. The RGB edge looks even better in person."
+      },
+      {
+        "name": "Mariam Samir",
+        "role": "Architect, Giza",
+        "text": "I needed a standing desk that doesn't wobble at full height. The Lift desk is rock solid and the memory buttons are a lifesaver."
+      },
+      {
+        "name": "Hany Fawzy",
+        "role": "Operations manager, New Cairo",
+        "text": "We furnished our whole office: 24 chairs, desks and a meeting table. One team, one invoice, everything installed in a day."
+      },
+      {
+        "name": "Nour El-Din",
+        "role": "Startup founder, Mansoura",
+        "text": "Good prices for teams and they actually pick up the phone. Paying on delivery made it easy to trust them the first time."
+      }
+    ],
+    "aboutEyebrow": "About us",
+    "aboutTitle": "Furniture for people who get things done.",
+    "aboutText": "We started by fitting out small offices in Cairo. Today we furnish home offices, gaming rooms and whole companies across Egypt, with chairs and desks we test ourselves before we sell them.",
+    "aboutCta": "More about us",
+    "stats": [
+      {
+        "value": "8+",
+        "label": "years in business"
+      },
+      {
+        "value": "12k",
+        "label": "setups delivered"
+      },
+      {
+        "value": "27",
+        "label": "governorates"
+      }
+    ]
+  },
+  "shop": {
+    "title": "All furniture",
+    "count": "{count, plural, =0 {No pieces} one {# piece} other {# pieces}}",
+    "empty": "Nothing here yet.",
+    "emptyHint": "Try another category or clear your search.",
+    "all": "All",
+    "searchPlaceholder": "Search chairs, desks, gaming…",
+    "searchResults": "Results for “{q}”",
+    "filters": "Filters",
+    "search": "Search",
+    "category": "Category",
+    "price": "Price (EGP)",
+    "min": "From",
+    "max": "To",
+    "inStock": "In stock only",
+    "sort": "Sort by",
+    "sortFeatured": "Featured",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "apply": "Apply",
+    "clear": "Clear all"
+  },
+  "product": {
+    "addToCart": "Add to cart",
+    "adding": "Adding…",
+    "added": "Added to cart",
+    "viewCart": "View cart",
+    "outOfStock": "Out of stock",
+    "inStock": "In stock",
+    "lowStock": "Only {count} left",
+    "quantity": "Quantity",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "save": "Save {amount}",
+    "sale": "Sale",
+    "details": "Details",
+    "codNote": "Cash on delivery · Delivery in 3–7 days",
+    "related": "You may also like",
+    "back": "Back"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "emptyHint": "Find something you love and it will show up here.",
+    "startShopping": "Start shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "continue": "Continue shopping",
+    "summary": "Order summary",
+    "unavailable": "No longer available",
+    "onlyLeft": "Only {count} available",
+    "codNote": "You pay in cash when your order arrives."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "contact": "Contact details",
+    "delivery": "Delivery address",
+    "fullName": "Full name",
+    "phone": "Mobile number",
+    "phoneHint": "Egyptian mobile, e.g. 01012345678",
+    "email": "Email",
+    "optional": "optional",
+    "governorate": "Governorate",
+    "choose": "Choose…",
+    "city": "City / Area",
+    "address": "Street, building, floor, apartment",
+    "notes": "Delivery notes",
+    "payment": "Payment",
+    "cod": "Cash on delivery",
+    "codHint": "Pay the courier in cash when your order arrives.",
+    "placeOrder": "Place order",
+    "placing": "Placing order…",
+    "terms": "By placing your order you agree to our shipping and returns policy."
+  },
+  "order": {
+    "thanksTitle": "Thank you, {name}!",
+    "thanksBody": "We received your order and will call you on {phone} to confirm delivery.",
+    "number": "Order number",
+    "date": "Date",
+    "status": "Status",
+    "payment": "Payment",
+    "items": "Items",
+    "deliverTo": "Delivering to",
+    "backHome": "Back to the shop",
+    "saveLink": "Save this page link to check your order later."
+  },
+  "status": {
+    "NEW": "New",
+    "CONFIRMED": "Confirmed",
+    "SHIPPED": "Shipped",
+    "DELIVERED": "Delivered",
+    "CANCELLED": "Cancelled"
+  },
+  "errors": {
+    "required": "This field is required",
+    "tooLong": "This is too long",
+    "invalidPhone": "Enter a valid Egyptian mobile number",
+    "invalidEmail": "Enter a valid email",
+    "invalidGovernorate": "Choose a governorate",
+    "invalidNumber": "Enter a valid number",
+    "invalidSlug": "Use lowercase letters, numbers and dashes",
+    "slugTaken": "This slug is already used",
+    "generic": "Something went wrong. Please try again.",
+    "rateLimited": "Too many attempts. Please wait a few minutes.",
+    "outOfStock": "Some items are no longer available in that quantity. Please review your cart.",
+    "emptyCart": "Your cart is empty.",
+    "fixFields": "Please fix the highlighted fields.",
+    "notFoundTitle": "Page not found",
+    "notFoundText": "The page you're looking for doesn't exist or has moved.",
+    "invalidImage": "Use a JPEG, PNG or WebP image",
+    "tooLarge": "Image must be under 10 MB",
+    "tooManyImages": "A product can have up to 10 images"
+  },
+  "pages": {
+    "about": {
+      "title": "About us",
+      "lead": "We started by fitting out small offices in Cairo with one idea: a good chair and a solid desk change how you work.",
+      "body": [
+        "Today we furnish home offices, gaming rooms and whole companies across Egypt. Every chair and desk we sell is one we have sat in, adjusted and tested for long days.",
+        "We keep the range focused: ergonomic office chairs, gaming chairs, desks that don't wobble, meeting tables and smart storage.",
+        "Our own team delivers and assembles in every governorate, and you only pay when your furniture is set up."
+      ]
+    },
+    "contact": {
+      "title": "Contact us",
+      "lead": "Questions about a piece, an order or delivery? We're happy to help.",
+      "phone": "Phone & WhatsApp",
+      "hours": "Hours",
+      "hoursText": "Saturday to Thursday, 10am – 8pm",
+      "address": "Showroom",
+      "addressText": "26 July Street, Zamalek, Cairo"
+    },
+    "shipping": {
+      "title": "Shipping & Returns",
+      "lead": "Simple and fair, with no surprises at the door.",
+      "sections": [
+        {
+          "title": "Delivery",
+          "text": "We deliver to all 27 governorates for one flat fee. Most orders arrive within 3–7 working days. We call you before we dispatch to agree on a time."
+        },
+        {
+          "title": "Payment",
+          "text": "Pay in cash when your order arrives. Please check the items in front of the courier before paying."
+        },
+        {
+          "title": "Returns",
+          "text": "If something arrives damaged or isn't what you ordered, refuse it at the door or contact us within 14 days and we'll collect it and refund or replace it."
+        }
+      ]
+    },
+    "services": {
+      "title": "Our services",
+      "lead": "More than furniture: we help you plan your workspace, deliver it and set it up.",
+      "items": [
+        {
+          "title": "Delivery to every governorate",
+          "text": "Our own team delivers to your door anywhere in Egypt, carefully packed and on the day we agree with you."
+        },
+        {
+          "title": "Free assembly",
+          "text": "We assemble chairs, desks and meeting tables in place and take the packaging away with us."
+        },
+        {
+          "title": "Office fit-out",
+          "text": "Furnishing a whole office? Send us your floor plan and we'll suggest a layout, quantities and a single quote."
+        },
+        {
+          "title": "Ergonomic advice",
+          "text": "Not sure which chair or desk height suits you? Tell us your height and how you work and we'll recommend a setup."
+        },
+        {
+          "title": "Cash on delivery",
+          "text": "Pay only when your furniture arrives and you've checked it."
+        },
+        {
+          "title": "Warranty and after-sales",
+          "text": "If a mechanism or part fails, call or message us and we'll arrange a fix or a replacement."
+        }
+      ],
+      "cta": "Ask us on WhatsApp"
+    }
+  },
+  "footer": {
+    "tagline": "Office and gaming furniture, delivered across Egypt.",
+    "shop": "Shop",
+    "help": "Help",
+    "rights": "All rights reserved."
+  },
+  "admin": {
+    "title": "Admin",
+    "dashboard": "Dashboard",
+    "orders": "Orders",
+    "products": "Products",
+    "categories": "Categories",
+    "settings": "Settings",
+    "viewStore": "View store",
+    "signOut": "Sign out",
+    "login": {
+      "title": "Sign in to admin",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "invalid": "Incorrect email or password."
+    },
+    "stats": {
+      "newOrders": "New orders",
+      "revenue30": "Revenue (30 days)",
+      "orders30": "Orders (30 days)",
+      "avgOrder": "Average order",
+      "lowStock": "Low stock",
+      "recentOrders": "Recent orders",
+      "lowStockTitle": "Running low",
+      "none": "Nothing to show yet."
+    },
+    "ordersPage": {
+      "all": "All",
+      "search": "Order #, phone or name",
+      "from": "From",
+      "to": "To",
+      "filter": "Filter",
+      "clear": "Clear",
+      "order": "Order",
+      "customer": "Customer",
+      "date": "Date",
+      "total": "Total",
+      "status": "Status",
+      "empty": "No orders match.",
+      "newBadge": "New",
+      "items": "Items",
+      "qty": "Qty",
+      "price": "Price",
+      "customerInfo": "Customer",
+      "deliveryInfo": "Delivery",
+      "notes": "Notes",
+      "actions": "Actions",
+      "moveTo": "Mark as {status}",
+      "cancel": "Cancel order",
+      "cancelConfirm": "Cancel this order and return the items to stock?",
+      "print": "Print packing slip",
+      "back": "All orders",
+      "packingSlip": "Packing slip",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "productsPage": {
+      "new": "New product",
+      "edit": "Edit product",
+      "name": "Name",
+      "price": "Price",
+      "stock": "Stock",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Hidden",
+      "empty": "No products yet.",
+      "arabic": "Arabic",
+      "english": "English",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "descriptionAr": "Description (Arabic)",
+      "descriptionEn": "Description (English)",
+      "slug": "URL slug",
+      "slugHint": "Leave empty to generate from the English name.",
+      "priceEgp": "Price (EGP)",
+      "compareAt": "Compare-at price (EGP)",
+      "compareAtHint": "Optional. Shows as a crossed-out price.",
+      "category": "Category",
+      "noCategory": "No category",
+      "featured": "Show on home page",
+      "visible": "Visible in store",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "delete": "Delete product",
+      "deleteConfirm": "Delete this product permanently? Past orders keep their copy.",
+      "images": "Images",
+      "imagesHint": "JPEG, PNG or WebP up to 10 MB. The first image is the main one.",
+      "upload": "Upload images",
+      "uploading": "Uploading…",
+      "moveUp": "Move earlier",
+      "moveDown": "Move later",
+      "removeImage": "Remove image",
+      "saveFirst": "Save the product first, then add images.",
+      "search": "Search products"
+    },
+    "categoriesPage": {
+      "add": "Add category",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "slug": "Slug",
+      "products": "Products",
+      "save": "Save",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this category? Its products will become uncategorised.",
+      "empty": "No categories yet."
+    },
+    "settingsPage": {
+      "storeNameAr": "Store name (Arabic)",
+      "storeNameEn": "Store name (English)",
+      "phone": "Contact phone",
+      "shippingFee": "Flat shipping fee (EGP)",
+      "save": "Save settings",
+      "saved": "Settings saved"
+    },
+    "customers": "Customers",
+    "customersPage": {
+      "search": "Name or phone",
+      "name": "Customer",
+      "phone": "Phone",
+      "orders": "Orders",
+      "spent": "Total spent",
+      "spentHint": "Cancelled orders are not counted.",
+      "firstOrder": "First order",
+      "lastOrder": "Last order",
+      "empty": "No customers yet.",
+      "filter": "Search",
+      "clear": "Clear"
+    }
+  }
+}

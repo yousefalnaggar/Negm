@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bayt — bilingual furniture store
 
-## Getting Started
+Next.js 16 (App Router) + Prisma 7 + PostgreSQL. Arabic (default, RTL) and English, light and dark themes, guest cart, cash-on-delivery checkout and an admin dashboard.
 
-First, run the development server:
+## Local development
+
+Requirements: Node 20.9+, Docker Desktop.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install                 # also generates the Prisma client
+cp .env.example .env        # then fill in BETTER_AUTH_SECRET and ADMIN_PASSWORD
+npm run db:up               # Postgres 18 on localhost:5434 (docker-compose.dev.yml)
+npm run db:migrate          # apply migrations
+npm run db:seed             # settings, demo catalog with photos, first admin
+npm run dev                 # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Store: http://localhost:3000 (redirects to `/ar`; `/en` for English)
+- Admin: http://localhost:3000/ar/admin, signing in with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `.env`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The seed is idempotent: it never overwrites existing rows, and it creates the admin only if that email doesn't exist yet.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Dev server |
+| `npm run build` / `npm start` | Production build / server |
+| `npm run typecheck` / `npm run lint` | TypeScript and ESLint |
+| `npm run db:migrate` | Create/apply a migration in development (`prisma migrate dev`) |
+| `npm run db:deploy` | Apply migrations in production (`prisma migrate deploy`) |
+| `npm run db:seed` | Seed data and first admin |
 
-To learn more about Next.js, take a look at the following resources:
+## How it fits together
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+messages/{ar,en}.json        all UI strings (storefront + admin)
+prisma/schema.prisma         data model; prisma/migrations is versioned
+src/proxy.ts                 locale routing (next-intl)
+src/app/[locale]/(store)/    storefront pages
+src/app/[locale]/admin/      admin (login + (panel) pages)
+src/actions/                 Server Actions: cart, checkout, admin
+src/lib/                     db, auth, cart, orders, validation, storage, helpers
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Money** is stored as integer piasters and formatted with `Intl` only for display.
+- **Prices and totals** are always recomputed from the database. Checkout decrements stock and creates the order in one transaction, guarded by an idempotency key.
+- **Bilingual content** uses `nameAr`/`nameEn`/`descriptionAr`/`descriptionEn` columns. Descriptions fall back to the other language when one is empty.
+- **Search** matches a normalized `searchText` column (Arabic diacritics stripped, alef/ya/ta-marbuta unified).
+- **Images** are processed with `sharp` (EXIF rotate, metadata stripped, WebP, at most 1600px). The database stores only object keys, and `MEDIA_BASE_URL` turns them into URLs. In development, files go to `public/uploads`. For production, swap `putObject`/`deleteObject` in `src/lib/storage.ts` for Cloudflare R2 and point `MEDIA_BASE_URL` at the CDN domain.
+- **Admin auth** uses Better Auth (email + password, sign-up disabled). Every admin page and Server Action calls `requireAdmin()` on the server.
 
-## Deploy on Vercel
+## Not built yet
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+These are planned in the full spec but not in this first development cut: R2 upload and three image sizes, analytics charts, customers page and CSV export, CSP header, unit tests, and the Docker/Caddy production setup with backups.
