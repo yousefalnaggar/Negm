@@ -47,9 +47,9 @@ src/lib/                     db, auth, cart, orders, validation, storage, helper
 - **Prices and totals** are always recomputed from the database. Checkout decrements stock and creates the order in one transaction, guarded by an idempotency key.
 - **Bilingual content** uses `nameAr`/`nameEn`/`descriptionAr`/`descriptionEn` columns. Descriptions fall back to the other language when one is empty.
 - **Search** matches a normalized `searchText` column (Arabic diacritics stripped, alef/ya/ta-marbuta unified).
-- **Images** are processed with `sharp` (EXIF rotate, metadata stripped, WebP, at most 1600px). The database stores only object keys, and `MEDIA_BASE_URL` turns them into URLs. In development, files go to `public/uploads`. For production, swap `putObject`/`deleteObject` in `src/lib/storage.ts` for Cloudflare R2 and point `MEDIA_BASE_URL` at the CDN domain.
+- **Images** are processed with `sharp` (EXIF rotate, metadata stripped, WebP, at most 1600px). The database stores only object keys, and `MEDIA_BASE_URL` turns them into URLs. With the `R2_*` variables set, files go to Cloudflare R2 and `MEDIA_BASE_URL` is the bucket's public URL; without them they go to `public/uploads` (development only). `npx tsx scripts/upload-to-r2.ts` copies existing local files into the bucket.
 - **Admin auth** uses Better Auth (email + password, sign-up disabled). Every admin page and Server Action calls `requireAdmin()` on the server.
 
 ## Not built yet
 
-These are planned in the full spec but not in this first development cut: R2 upload and three image sizes, analytics charts, customers page and CSV export, CSP header, unit tests, and the Docker/Caddy production setup with backups.
+These are planned in the full spec but not in this first development cut: three image sizes, analytics charts, customers CSV export, CSP header, unit tests, and the Docker/Caddy production setup with backups.

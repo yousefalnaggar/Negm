@@ -1,35 +1,23 @@
 import "dotenv/config";
 import { randomBytes } from "node:crypto";
-import { existsSync } from "node:fs";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hashPassword } from "better-auth/crypto";
-import sharp from "sharp";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { buildSearchText } from "../src/lib/normalize";
+import { processImage, putObject } from "../src/lib/storage";
 import { categories, products, RETIRED_CATEGORIES, RETIRED_PRODUCTS } from "./seed-data";
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
-const UPLOADS = path.join(process.cwd(), "public", "uploads");
 
-// Demo photos from Unsplash (free licence). Downloaded once and converted to WebP.
+// Demo photos from Unsplash (free licence), stored like admin uploads (R2 or public/uploads).
+// Only called for rows the seed creates, so re-running it doesn't upload again.
 async function seedImage(photoId: string) {
+  const res = await fetch(`https://images.unsplash.com/photo-${photoId}?w=1600&q=85&fm=jpg`);
+  if (!res.ok) throw new Error(`download failed: ${photoId}`);
+  const img = await processImage(Buffer.from(await res.arrayBuffer()));
   const key = `seed/${photoId}.webp`;
-  const file = path.join(UPLOADS, key);
-  if (!existsSync(file)) {
-    const res = await fetch(`https://images.unsplash.com/photo-${photoId}?w=1600&q=85&fm=jpg`);
-    if (!res.ok) throw new Error(`download failed: ${photoId}`);
-    const data = await sharp(Buffer.from(await res.arrayBuffer()))
-      .rotate()
-      .resize({ width: 1600, withoutEnlargement: true })
-      .webp({ quality: 80 })
-      .toBuffer();
-    await mkdir(path.dirname(file), { recursive: true });
-    await writeFile(file, data);
-  }
-  const meta = await sharp(file).metadata();
-  return { key, width: meta.width!, height: meta.height! };
+  await putObject(key, img.data);
+  return { key, width: img.width, height: img.height };
 }
 
 async function main() {
@@ -44,12 +32,12 @@ async function main() {
 
   const catIds: Record<string, string> = {};
   for (const [i, c] of categories.entries()) {
-    const img = await seedImage(c.photo);
-    const row = await db.category.upsert({
-      where: { slug: c.slug },
-      update: {},
-      create: { slug: c.slug, nameAr: c.nameAr, nameEn: c.nameEn, imageKey: img.key, position: i },
-    });
+    const existing = await db.category.findUnique({ where: { slug: c.slug } });
+    const row =
+      existing ??
+      (await db.category.create({
+        data: { slug: c.slug, nameAr: c.nameAr, nameEn: c.nameEn, imageKey: (await seedImage(c.photo)).key, position: i },
+      }));
     catIds[c.slug] = row.id;
   }
 

@@ -54,10 +54,10 @@ npx prisma studio    # optional: http://localhost:5555
 - Dashboard: new orders, 30-day revenue, order count, average order, recent orders, low stock
 - Orders: status tabs, search (number/phone/name), date range, pagination, detail page, status flow `NEW → CONFIRMED → SHIPPED → DELIVERED` plus `CANCELLED` (restores stock), printable packing slip
 - Products: list and search, create and edit with Arabic and English side by side, price, compare-at price, stock, category, visible/featured flags, delete
-- Images: upload (sharp: real content check, 50 MP limit, EXIF rotate, metadata stripped, WebP ≤1600px), reorder, delete, max 10. The DB stores **keys only**.
+- Images: upload (sharp: real content check, 50 MP limit, EXIF rotate, metadata stripped, WebP ≤1600px), reorder, delete, max 10. The DB stores **keys only**. A file is deleted only when no product, category or past order still uses it, so order history keeps its photos.
 - Customers: guests grouped by phone, with order count, total spent (cancelled orders excluded), first/last order and a link to their orders
 - Stock field: digits only, with −/+ buttons
-- Categories (add, edit, delete) and Settings (bilingual store name, phone, flat shipping fee)
+- Categories (add, edit, delete, photo upload with preview) and Settings (bilingual store name, phone, flat shipping fee)
 
 ### Quality checks run
 - `tsc` ✅, `eslint` ✅, `next build` ✅
@@ -66,14 +66,16 @@ npx prisma studio    # optional: http://localhost:5555
 
 ## Left for production ⏳
 
+> The step-by-step launch plan for Dokploy is in [Production_List.md](Production_List.md). The list below is the original backlog.
+
 Ordered by priority. Items marked **must** block launch.
 
 ### 1. Images on Cloudflare R2 (must)
-- [ ] Replace `putObject` / `deleteObject` in `src/lib/storage.ts` with `@aws-sdk/client-s3` (R2 endpoint), with `Content-Type: image/webp` and `Cache-Control: public, max-age=31536000, immutable`
+- [x] `src/lib/storage.ts` uploads to R2 (`@aws-sdk/client-s3`) when all `R2_*` variables are set, with `Content-Type: image/webp` and a one-year immutable cache; without them it falls back to `public/uploads`
+- [x] Seed uploads its demo photos the same way; `scripts/upload-to-r2.ts` copies existing `public/uploads` files into the bucket
+- [ ] Test upload, display and delete against the `negm-dev` bucket (waiting for its r2.dev URL and keys in `.env`)
+- [ ] Production bucket `negm-prod` with a custom domain (`MEDIA_BASE_URL=https://cdn.<domain>`, not `r2.dev`)
 - [ ] Generate three sizes (400w / 800w / 1600w) and use `srcset` / `sizes` on product images
-- [ ] Set `MEDIA_BASE_URL=https://cdn.<domain>` (custom domain on the bucket, not `r2.dev`)
-- [ ] Add MinIO to `docker-compose.dev.yml` so dev uses the same S3 code path
-- [ ] Move the seed photos to R2 (they're currently in `public/uploads/seed`)
 - Reason: `next start` does not serve files added to `public/` after the build, so local-disk uploads won't show in production.
 
 ### 2. Deployment files (must)

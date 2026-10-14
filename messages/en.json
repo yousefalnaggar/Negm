@@ -375,7 +375,10 @@
       "moveDown": "Move later",
       "removeImage": "Remove image",
       "saveFirst": "Save the product first, then add images.",
-      "search": "Search products"
+      "search": "Search products",
+      "editShort": "Edit",
+      "deleteShort": "Delete",
+      "actions": "Actions"
     },
     "categoriesPage": {
       "add": "Add category",
@@ -386,7 +389,8 @@
       "save": "Save",
       "delete": "Delete",
       "deleteConfirm": "Delete this category? Its products will become uncategorised.",
-      "empty": "No categories yet."
+      "empty": "No categories yet.",
+      "photo": "Photo"
     },
     "settingsPage": {
       "storeNameAr": "Store name (Arabic)",

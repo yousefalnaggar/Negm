@@ -375,7 +375,10 @@
       "moveDown": "تأخير",
       "removeImage": "حذف الصورة",
       "saveFirst": "احفظ المنتج أولاً ثم أضف الصور.",
-      "search": "ابحث في المنتجات"
+      "search": "ابحث في المنتجات",
+      "editShort": "تعديل",
+      "deleteShort": "حذف",
+      "actions": "إجراءات"
     },
     "categoriesPage": {
       "add": "إضافة قسم",
@@ -386,7 +389,8 @@
       "save": "حفظ",
       "delete": "حذف",
       "deleteConfirm": "حذف هذا القسم؟ منتجاته ستصبح بدون قسم.",
-      "empty": "لا توجد أقسام بعد."
+      "empty": "لا توجد أقسام بعد.",
+      "photo": "الصورة"
     },
     "settingsPage": {
       "storeNameAr": "اسم المتجر (عربي)",

@@ -11,7 +11,7 @@ import { db } from "@/lib/db";
 import { buildSearchText, slugify } from "@/lib/normalize";
 import { changeOrderStatus } from "@/lib/orders";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { deleteObject, ImageError, newProductImageKey, processImage, putObject } from "@/lib/storage";
+import { deleteObject, ImageError, newImageKey, processImage, putObject } from "@/lib/storage";
 import { categorySchema, fieldErrors, productSchema, settingsSchema } from "@/lib/validation";
 
 export type FormState = { error?: string; fields?: Record<string, string>; ok?: boolean; email?: string };
@@ -22,6 +22,21 @@ async function localeRedirect(href: string): Promise<never> {
 
 function refreshAll() {
   revalidatePath("/", "layout");
+}
+
+/**
+ * Removes stored files nothing points to any more. Call after the DB rows are gone.
+ * Orders keep their own image snapshot, so a photo shown on a past order is kept.
+ */
+async function deleteUnusedObjects(keys: string[]) {
+  if (keys.length === 0) return;
+  const [orders, images, categories] = await Promise.all([
+    db.orderItem.findMany({ where: { imageKey: { in: keys } }, select: { imageKey: true } }),
+    db.productImage.findMany({ where: { key: { in: keys } }, select: { key: true } }),
+    db.category.findMany({ where: { imageKey: { in: keys } }, select: { imageKey: true } }),
+  ]);
+  const used = new Set([...orders.map((o) => o.imageKey), ...images.map((i) => i.key), ...categories.map((c) => c.imageKey)]);
+  await Promise.all(keys.filter((k) => !used.has(k)).map(deleteObject));
 }
 
 // ---------- Auth ----------
@@ -109,13 +124,14 @@ export async function saveProduct(productId: string | null, _prev: FormState, fo
   return localeRedirect(`/admin/products/${created.id}`);
 }
 
-export async function deleteProduct(productId: string) {
+/** From the product page it redirects to the list; from the list (`stay`) it just refreshes it, keeping any search. */
+export async function deleteProduct(productId: string, stay = false) {
   await requireAdmin();
   const images = await db.productImage.findMany({ where: { productId } });
   await db.product.delete({ where: { id: productId } });
-  await Promise.all(images.map((i) => deleteObject(i.key)));
+  await deleteUnusedObjects(images.map((i) => i.key));
   refreshAll();
-  return localeRedirect("/admin/products");
+  if (!stay) return localeRedirect("/admin/products");
 }
 
 // ---------- Product images ----------
@@ -133,7 +149,7 @@ export async function uploadProductImage(productId: string, formData: FormData):
 
   try {
     const img = await processImage(Buffer.from(await file.arrayBuffer()));
-    const key = newProductImageKey(productId);
+    const key = newImageKey(`products/${productId}`);
     await putObject(key, img.data);
     await db.productImage.create({ data: { productId, key, width: img.width, height: img.height, position: count } });
   } catch (err) {
@@ -163,7 +179,7 @@ export async function deleteProductImage(imageId: string) {
   const image = await db.productImage.findUnique({ where: { id: imageId } });
   if (!image) return;
   await db.productImage.delete({ where: { id: imageId } });
-  await deleteObject(image.key);
+  await deleteUnusedObjects([image.key]);
   refreshAll();
 }
 
@@ -181,16 +197,37 @@ export async function saveCategory(categoryId: string | null, _prev: FormState, 
   const clash = await db.category.findFirst({ where: { slug, NOT: categoryId ? { id: categoryId } : undefined } });
   if (clash) return { error: "fixFields", fields: { slug: "slugTaken" } };
 
-  const data = { nameAr: parsed.data.nameAr, nameEn: parsed.data.nameEn, slug };
-  if (categoryId) await db.category.update({ where: { id: categoryId }, data });
-  else await db.category.create({ data: { ...data, position: await db.category.count() } });
+  // Optional photo: only replaced when a new file is picked.
+  const file = formData.get("image");
+  let imageKey: string | undefined;
+  if (file instanceof File && file.size > 0) {
+    try {
+      const img = await processImage(Buffer.from(await file.arrayBuffer()));
+      imageKey = newImageKey("categories");
+      await putObject(imageKey, img.data);
+    } catch (err) {
+      if (err instanceof ImageError) return { error: "fixFields", fields: { image: err.message } };
+      console.error("[upload] category image failed", { categoryId, message: (err as Error).message });
+      return { error: "generic" };
+    }
+  }
+
+  const data = { nameAr: parsed.data.nameAr, nameEn: parsed.data.nameEn, slug, ...(imageKey && { imageKey }) };
+  if (categoryId) {
+    const old = await db.category.findUnique({ where: { id: categoryId }, select: { imageKey: true } });
+    await db.category.update({ where: { id: categoryId }, data });
+    if (imageKey && old?.imageKey) await deleteUnusedObjects([old.imageKey]);
+  } else {
+    await db.category.create({ data: { ...data, position: await db.category.count() } });
+  }
   refreshAll();
   return { ok: true };
 }
 
 export async function deleteCategory(categoryId: string) {
   await requireAdmin();
-  await db.category.delete({ where: { id: categoryId } });
+  const category = await db.category.delete({ where: { id: categoryId } });
+  if (category.imageKey) await deleteUnusedObjects([category.imageKey]);
   refreshAll();
 }
 
