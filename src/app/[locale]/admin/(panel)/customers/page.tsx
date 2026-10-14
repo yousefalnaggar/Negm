@@ -63,7 +63,7 @@ export default async function CustomersPage({ params, searchParams }: PageProps<
 
   return (
     <>
-      <PageHeader title={tAdmin("customers")} />
+      <PageHeader title={tAdmin("customers")} count={tAdmin("counts.customers", { count: total })} />
 
       <form className="card mb-6 flex gap-3 p-4" action="">
         <input name="q" defaultValue={q} placeholder={t("search")} className="input" />

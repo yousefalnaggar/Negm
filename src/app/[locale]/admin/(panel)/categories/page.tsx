@@ -17,7 +17,7 @@ export default async function CategoriesPage({ params }: PageProps<"/[locale]/ad
 
   return (
     <>
-      <PageHeader title={tAdmin("categories")} />
+      <PageHeader title={tAdmin("categories")} count={tAdmin("counts.categories", { count: categories.length })} />
       <div className="card mb-6">
         <CategoryForm />
       </div>

@@ -62,7 +62,7 @@ export default async function OrdersPage({ params, searchParams }: PageProps<"/[
 
   return (
     <>
-      <PageHeader title={tAdmin("orders")} />
+      <PageHeader title={tAdmin("orders")} count={tAdmin("counts.orders", { count: total })} />
 
       <div className="mb-4 flex gap-1.5 overflow-x-auto">
         {[undefined, ...STATUSES].map((s) => (

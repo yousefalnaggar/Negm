@@ -32,7 +32,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps<"
 
   return (
     <>
-      <PageHeader title={tAdmin("products")}>
+      <PageHeader title={tAdmin("products")} count={tAdmin("counts.products", { count: products.length })}>
         <Link href="/admin/products/new" className="btn-primary">
           <Plus className="size-4" /> {t("new")}
         </Link>

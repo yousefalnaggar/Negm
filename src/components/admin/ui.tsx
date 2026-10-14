@@ -18,10 +18,14 @@ export function StatusBadge({ status }: { status: OrderStatus }) {
   );
 }
 
-export function PageHeader({ title, children }: { title: string; children?: React.ReactNode }) {
+/** `count` is a short line under the title, e.g. "21 products". */
+export function PageHeader({ title, count, children }: { title: string; count?: string; children?: React.ReactNode }) {
   return (
     <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <h1 className="font-display text-3xl font-bold tracking-tight">{title}</h1>
+      <div>
+        <h1 className="font-display text-3xl font-bold tracking-tight">{title}</h1>
+        {count && <p className="mt-1 text-sm text-muted">{count}</p>}
+      </div>
       {children}
     </div>
   );
