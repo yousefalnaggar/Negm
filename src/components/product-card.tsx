@@ -45,13 +45,9 @@ export function ProductCard({ product, priority = false }: { product: CardProduc
   );
 }
 
-/** `withSidebar` drops to three columns on large screens to make room for the shop filters. */
-export function ProductGrid({ products, withSidebar }: { products: CardProduct[]; withSidebar?: boolean }) {
+export function ProductGrid({ products }: { products: CardProduct[] }) {
   return (
-    <Reveal
-      stagger
-      className={`grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-3 ${withSidebar ? "" : "lg:grid-cols-4"}`}
-    >
+    <Reveal stagger className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
       {products.map((p, i) => (
         <ProductCard key={p.id} product={p} priority={i < 4} />
       ))}

@@ -1,5 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ListFilters } from "@/components/admin/list-filters";
 import { PageHeader, StatusBadge } from "@/components/admin/ui";
+import { Pagination } from "@/components/pagination";
 import type { OrderStatus, Prisma } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { requireAdmin } from "@/lib/auth";
@@ -9,7 +11,7 @@ import { formatDate, formatPrice } from "@/lib/money";
 import { normalizeDigits } from "@/lib/normalize";
 
 const STATUSES: OrderStatus[] = ["NEW", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"];
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 24;
 
 function str(v: string | string[] | undefined) {
   return typeof v === "string" ? v.trim().slice(0, 100) : "";
@@ -47,7 +49,7 @@ export default async function OrdersPage({ params, searchParams }: PageProps<"/[
   const [t, tAdmin, orders, total] = await Promise.all([
     getTranslations("admin.ordersPage"),
     getTranslations("admin"),
-    db.order.findMany({ where, orderBy: { createdAt: "desc" }, skip: (page - 1) * PAGE_SIZE, take: PAGE_SIZE }),
+    db.order.findMany({ where, orderBy: [{ createdAt: "desc" }, { id: "asc" }], skip: (page - 1) * PAGE_SIZE, take: PAGE_SIZE }),
     db.order.count({ where }),
   ]);
   const tStatus = await getTranslations("status");
@@ -64,7 +66,7 @@ export default async function OrdersPage({ params, searchParams }: PageProps<"/[
     <>
       <PageHeader title={tAdmin("orders")} count={tAdmin("counts.orders", { count: total })} />
 
-      <div className="mb-4 flex gap-1.5 overflow-x-auto">
+      <div className="mb-4 flex flex-wrap gap-1.5">
         {[undefined, ...STATUSES].map((s) => (
           <Link
             key={s ?? "all"}
@@ -76,61 +78,42 @@ export default async function OrdersPage({ params, searchParams }: PageProps<"/[
         ))}
       </div>
 
-      <form className="card mb-6 grid gap-3 p-4 sm:grid-cols-[1fr_auto_auto_auto]" action="">
-        {status && <input type="hidden" name="status" value={status} />}
-        <input name="q" defaultValue={str(sp.q)} placeholder={t("search")} className="input" />
-        <label className="flex items-center gap-2 text-sm text-muted">
-          {t("from")} <input type="date" name="from" defaultValue={from} className="input" />
-        </label>
-        <label className="flex items-center gap-2 text-sm text-muted">
-          {t("to")} <input type="date" name="to" defaultValue={to} className="input" />
-        </label>
-        <div className="flex gap-2">
-          <button type="submit" className="btn-dark">{t("filter")}</button>
-          <Link href="/admin/orders" className="btn-ghost">{t("clear")}</Link>
-        </div>
-      </form>
-
-      <div className="card overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="border-b border-line text-start text-xs text-muted">
-            <tr>
-              <th className="px-4 py-3 text-start font-medium">{t("order")}</th>
-              <th className="px-4 py-3 text-start font-medium">{t("customer")}</th>
-              <th className="px-4 py-3 text-start font-medium">{t("date")}</th>
-              <th className="px-4 py-3 text-start font-medium">{t("status")}</th>
-              <th className="px-4 py-3 text-end font-medium">{t("total")}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-line">
-            {orders.map((o) => (
-              <tr key={o.id} className={`hover:bg-sunken/60 ${o.status === "NEW" ? "bg-accent-soft/40" : ""}`}>
-                <td className="px-4 py-3">
-                  <Link href={`/admin/orders/${o.id}`} className="font-semibold tabular-nums hover:text-accent">#{o.number}</Link>
-                </td>
-                <td className="px-4 py-3">
-                  <p>{o.customerName}</p>
-                  <p className="text-xs text-muted">
-                    <span dir="ltr">{o.phone}</span> · {governorateName(o.governorate, locale)}
-                  </p>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-muted">{formatDate(o.createdAt, locale, true)}</td>
-                <td className="px-4 py-3"><StatusBadge status={o.status} /></td>
-                <td className="px-4 py-3 text-end font-medium whitespace-nowrap">{formatPrice(o.total, locale)}</td>
+      <ListFilters placeholder={t("search")} dates filterKeys={["q", "status", "from", "to"]}>
+        <div className="card">
+          <table className="table-cards w-full text-sm">
+            <thead className="border-b border-line text-start text-xs text-muted">
+              <tr>
+                <th className="px-4 py-3 text-start font-medium">{t("order")}</th>
+                <th className="px-4 py-3 text-start font-medium">{t("customer")}</th>
+                <th className="px-4 py-3 text-start font-medium">{t("date")}</th>
+                <th className="px-4 py-3 text-start font-medium">{t("status")}</th>
+                <th className="px-4 py-3 text-end font-medium">{t("total")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {orders.length === 0 && <p className="p-8 text-center text-muted">{t("empty")}</p>}
-      </div>
-
-      {pages > 1 && (
-        <div className="mt-6 flex items-center justify-between text-sm">
-          {page > 1 ? <Link href={qs({ page: page - 1 })} className="btn-outline">{t("prev")}</Link> : <span />}
-          <span className="text-muted tabular-nums">{page} / {pages}</span>
-          {page < pages ? <Link href={qs({ page: page + 1 })} className="btn-outline">{t("next")}</Link> : <span />}
+            </thead>
+            <tbody className="divide-y divide-line">
+              {orders.map((o) => (
+                <tr key={o.id} className={`hover:bg-sunken/60 ${o.status === "NEW" ? "bg-accent-soft/40" : ""}`}>
+                  <td className="px-4 py-3">
+                    <Link href={`/admin/orders/${o.id}`} className="font-semibold tabular-nums hover:text-accent">#{o.number}</Link>
+                  </td>
+                  <td className="px-4 py-3 max-md:col-span-2">
+                    <p>{o.customerName}</p>
+                    <p className="text-xs text-muted">
+                      <span dir="ltr">{o.phone}</span> · {governorateName(o.governorate, locale)}
+                    </p>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-muted">{formatDate(o.createdAt, locale, true)}</td>
+                  <td className="px-4 py-3 max-md:col-start-2 max-md:row-start-1 max-md:justify-self-end"><StatusBadge status={o.status} /></td>
+                  <td className="px-4 py-3 text-end font-medium whitespace-nowrap max-md:justify-self-end">{formatPrice(o.total, locale)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {orders.length === 0 && <p className="p-8 text-center text-muted">{t("empty")}</p>}
         </div>
-      )}
+
+        <Pagination page={page} pages={pages} href={(p) => qs({ page: p })} />
+      </ListFilters>
     </>
   );
 }

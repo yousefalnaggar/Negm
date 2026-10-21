@@ -3,19 +3,23 @@ import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCartCount } from "@/lib/cart";
+import { getCategories } from "@/lib/catalog";
+import { localName } from "@/lib/localized";
 import { whatsappUrl } from "@/lib/normalize";
 import { getSettings } from "@/lib/settings";
 import { LanguageSwitcher } from "./language-switcher";
 import { MobileMenu } from "./mobile-menu";
+import { SearchDialog } from "./search-dialog";
 import { ThemeToggle } from "./theme-toggle";
 
 export async function Header() {
-  const [locale, t, tHome, settings, count] = await Promise.all([
+  const [locale, t, tHome, settings, count, categories] = await Promise.all([
     getLocale(),
     getTranslations("nav"),
     getTranslations("home"),
     getSettings(),
     getCartCount(),
+    getCategories(),
   ]);
   const storeName = locale === "ar" ? settings.storeNameAr : settings.storeNameEn;
   const links = [
@@ -32,10 +36,10 @@ export async function Header() {
         <span className="me-2 inline-block size-1.5 rounded-full bg-pop align-middle" />
         {tHome("promises.cod")} · {tHome("promises.delivery")}
       </div>
-      <div className="container-page flex h-16 items-center gap-2 sm:gap-4">
+      <div className="container-page flex h-16 items-center gap-1.5 sm:gap-4">
         <MobileMenu links={links} whatsapp={{ href: whatsapp, label: t("contactWhatsapp") }} />
 
-        <Link href="/" className="group flex min-w-0 items-center gap-2 font-display text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
+        <Link href="/" className="group flex min-w-0 items-center gap-1.5 font-display text-lg font-extrabold tracking-tight text-ink min-[360px]:gap-2 min-[360px]:text-xl sm:text-2xl">
           <span className="size-3 shrink-0 rotate-45 rounded-[3px] bg-accent transition-transform duration-500 group-hover:rotate-[225deg]" />
           <span className="truncate">{storeName}</span>
         </Link>
@@ -57,14 +61,15 @@ export async function Header() {
           </a>
         </nav>
 
-        <div className="ms-auto flex shrink-0 items-center gap-0.5">
+        <div className="ms-auto flex shrink-0 items-center sm:gap-0.5">
+          <SearchDialog categories={categories.map((c) => ({ slug: c.slug, name: localName(c, locale) }))} />
           <Suspense>
             <LanguageSwitcher />
           </Suspense>
           <ThemeToggle />
           <Link
             href="/cart"
-            className="relative grid size-10 place-items-center rounded-full text-ink hover:bg-sunken"
+            className="relative grid size-9 place-items-center rounded-full text-ink hover:bg-sunken sm:size-10"
             aria-label={`${t("cart")} (${count})`}
           >
             <ShoppingBag className="size-[18px]" strokeWidth={1.75} />

@@ -19,7 +19,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
       locale={other}
       lang={other}
       title={t("switchLanguage")}
-      className={`inline-flex h-10 items-center gap-1.5 rounded-full px-2.5 text-sm font-bold text-ink transition-colors hover:bg-sunken ${className}`}
+      className={`inline-flex h-9 items-center gap-1 rounded-full px-2 sm:h-10 sm:gap-1.5 sm:px-2.5 text-sm font-bold text-ink transition-colors hover:bg-sunken ${className}`}
     >
       <img src={FLAGS[other].src} alt="" width={20} height={14} className="h-3.5 w-5 rounded-[3px] object-cover ring-1 ring-black/10" />
       {FLAGS[other].code}

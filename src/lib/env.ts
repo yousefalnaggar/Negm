@@ -10,5 +10,19 @@ const schema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 });
 
-// Fails fast at startup if something is missing.
-export const env = schema.parse(process.env);
+// `next build` loads server modules to prepare pages, but secrets only exist where the app
+// runs (the Docker build has none). So the check is skipped during the build and runs when
+// the server starts, failing fast if something is missing.
+// The placeholders only keep libraries (Better Auth) from logging errors while building;
+// they never serve a request, because the server parses the real environment on start.
+const isBuild = process.env.NEXT_PHASE === "phase-production-build";
+export const env = isBuild
+  ? schema.parse({
+      DATABASE_URL: "postgresql://build",
+      BETTER_AUTH_SECRET: "build-time-placeholder-never-used-at-runtime",
+      BETTER_AUTH_URL: "http://localhost",
+      SITE_URL: "http://localhost",
+      MEDIA_BASE_URL: "/uploads",
+      ...process.env,
+    })
+  : schema.parse(process.env);

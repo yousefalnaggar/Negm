@@ -46,7 +46,7 @@ export function CategoryForm({ category }: { category?: Category }) {
     <form
       action={action}
       key={category ? (category.imageUrl ?? "") : String(state.ok)}
-      className="grid items-start gap-3 p-4 sm:grid-cols-[auto_1fr_1fr_1fr_auto]"
+      className="grid items-start gap-3 p-4 sm:grid-cols-[auto_1fr_1fr] xl:grid-cols-[auto_1fr_1fr_1fr_auto]"
     >
       <PhotoPicker current={category?.imageUrl ?? null} label={t("photo")} />
       <div>
@@ -57,11 +57,12 @@ export function CategoryForm({ category }: { category?: Category }) {
         <input name="nameEn" defaultValue={category?.nameEn} placeholder={t("nameEn")} aria-label={t("nameEn")} required dir="ltr" className="input" />
         {err("nameEn")}
       </div>
-      <div>
+      {/* Two rows below 1280px (photo + names, then slug + buttons), one row above. */}
+      <div className="sm:col-start-2 xl:col-start-auto">
         <input name="slug" defaultValue={category?.slug} placeholder={t("slug")} aria-label={t("slug")} dir="ltr" className="input" />
         {err("slug")}
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex flex-wrap items-center gap-1">
         <button type="submit" disabled={pending} className={category ? "btn-outline" : "btn-primary"}>
           {category ? t("save") : t("add")}
         </button>
@@ -69,7 +70,7 @@ export function CategoryForm({ category }: { category?: Category }) {
           <DeleteButton label={`${t("delete")} (${category.count})`} confirmText={t("deleteConfirm")} onDelete={() => deleteCategory(category.id)} />
         )}
       </div>
-      {state.fields?.image && <div className="-mt-2 sm:col-span-5">{err("image")}</div>}
+      {state.fields?.image && <div className="-mt-2 sm:col-span-3 xl:col-span-5">{err("image")}</div>}
     </form>
   );
 }

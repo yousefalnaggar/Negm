@@ -16,7 +16,8 @@
     "skip": "Skip to content",
     "products": "Products",
     "services": "Services",
-    "contactWhatsapp": "Contact us"
+    "contactWhatsapp": "Contact us",
+    "search": "Search"
   },
   "home": {
     "eyebrow": "Office & gaming furniture",
@@ -92,24 +93,44 @@
     "title": "All furniture",
     "count": "{count, plural, =0 {No pieces} one {# piece} other {# pieces}}",
     "empty": "Nothing here yet.",
-    "emptyHint": "Try another category or clear your search.",
+    "emptyHint": "Try removing a filter or searching for something else.",
     "all": "All",
-    "searchPlaceholder": "Search chairs, desks, gaming…",
     "searchResults": "Results for “{q}”",
     "filters": "Filters",
-    "search": "Search",
     "category": "Category",
-    "price": "Price (EGP)",
+    "price": "Price",
     "min": "From",
     "max": "To",
-    "inStock": "In stock only",
+    "inStock": "In stock",
     "sort": "Sort by",
     "sortFeatured": "Featured",
     "sortNewest": "Newest",
     "sortPriceAsc": "Price: low to high",
     "sortPriceDesc": "Price: high to low",
     "apply": "Apply",
-    "clear": "Clear all"
+    "clear": "Clear all",
+    "anyPrice": "Any price",
+    "under": "Under {max} EGP",
+    "between": "{min} – {max} EGP",
+    "over": "{min}+ EGP",
+    "customPrice": "Custom range (EGP)",
+    "onSale": "On sale",
+    "availability": "Availability",
+    "showResults": "{count, plural, =0 {No pieces match} one {Show # piece} other {Show # pieces}}",
+    "remove": "Remove filter: {label}",
+    "noMatch": "No pieces match these filters."
+  },
+  "search": {
+    "placeholder": "Search chairs, desks, gaming…",
+    "short": "Search products",
+    "categories": "Categories",
+    "products": "Products",
+    "browse": "Browse categories",
+    "seeAll": "{count, plural, one {See # result} other {See all # results}}",
+    "none": "No results for “{q}”",
+    "noneHint": "Check the spelling, or browse a category.",
+    "clear": "Clear search",
+    "cancel": "Cancel"
   },
   "product": {
     "addToCart": "Add to cart",
@@ -274,6 +295,10 @@
       "cta": "Ask us on WhatsApp"
     }
   },
+  "pagination": {
+    "label": "Pages",
+    "page": "Page {page}"
+  },
   "footer": {
     "tagline": "Office and gaming furniture, delivered across Egypt.",
     "shop": "Shop",
@@ -309,11 +334,7 @@
     },
     "ordersPage": {
       "all": "All",
-      "search": "Order #, phone or name",
-      "from": "From",
-      "to": "To",
-      "filter": "Filter",
-      "clear": "Clear",
+      "search": "Search by order #, phone or name",
       "order": "Order",
       "customer": "Customer",
       "date": "Date",
@@ -333,9 +354,7 @@
       "cancelConfirm": "Cancel this order and return the items to stock?",
       "print": "Print packing slip",
       "back": "All orders",
-      "packingSlip": "Packing slip",
-      "prev": "Previous",
-      "next": "Next"
+      "packingSlip": "Packing slip"
     },
     "productsPage": {
       "new": "New product",
@@ -375,10 +394,11 @@
       "moveDown": "Move later",
       "removeImage": "Remove image",
       "saveFirst": "Save the product first, then add images.",
-      "search": "Search products",
+      "search": "Search by product name",
       "editShort": "Edit",
       "deleteShort": "Delete",
-      "actions": "Actions"
+      "actions": "Actions",
+      "noMatch": "No products match your search."
     },
     "categoriesPage": {
       "add": "Add category",
@@ -402,7 +422,7 @@
     },
     "customers": "Customers",
     "customersPage": {
-      "search": "Name or phone",
+      "search": "Search by name or phone",
       "name": "Customer",
       "phone": "Phone",
       "orders": "Orders",
@@ -411,14 +431,18 @@
       "firstOrder": "First order",
       "lastOrder": "Last order",
       "empty": "No customers yet.",
-      "filter": "Search",
-      "clear": "Clear"
+      "noMatch": "No customers match your search."
     },
     "counts": {
       "orders": "{count, plural, =0 {No orders} one {# order} other {# orders}}",
       "customers": "{count, plural, =0 {No customers} one {# customer} other {# customers}}",
       "products": "{count, plural, =0 {No products} one {# product} other {# products}}",
       "categories": "{count, plural, =0 {No categories} one {# category} other {# categories}}"
+    },
+    "filters": {
+      "from": "From",
+      "to": "To",
+      "clear": "Clear filters"
     }
   }
 }

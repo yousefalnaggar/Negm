@@ -12,6 +12,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Self-contained server in .next/standalone with only the node_modules it needs (used by the Dockerfile).
+  output: "standalone",
   allowedDevOrigins: ["192.168.1.6"], // testing dev from my iphone
   poweredByHeader: false,
   serverExternalPackages: ["sharp"],

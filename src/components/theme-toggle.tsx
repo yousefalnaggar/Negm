@@ -11,7 +11,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className={`grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-sunken ${className}`}
+      className={`grid size-9 place-items-center sm:size-10 rounded-full text-ink transition-colors hover:bg-sunken ${className}`}
       aria-label={t("toggleTheme")}
       title={t("toggleTheme")}
     >

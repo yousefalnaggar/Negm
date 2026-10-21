@@ -10,21 +10,21 @@ Plan assumed: KVM 1 (1 vCPU / 4 GB) or KVM 2, Dokploy, photos on Cloudflare R2, 
 ## Phase 1 — Code (before the first deploy)
 
 ### 1. Commit the R2 work [Claude]
-- [ ] Commit `storage.ts` (R2 mode), the seed change, `scripts/upload-to-r2.ts` and the docs (currently uncommitted)
+- [x] ~~Commit `storage.ts` (R2 mode), the seed change, `scripts/upload-to-r2.ts` and the docs~~ (commit `ba66c8d`)
 
 ### 2. Docker image [Claude]
-- [ ] `next.config.ts`: `output: "standalone"`
-- [ ] `Dockerfile`: multi-stage, Node LTS, non-root user, sharp working, Prisma client generated
-- [ ] Container start runs `prisma migrate deploy`, then starts the app (needs the Prisma CLI and `prisma.config.ts` in the image)
-- [ ] `.dockerignore` (`.env`, `node_modules`, `.next`, `public/uploads`)
-- [ ] Test the image locally against the dev database
+- [x] ~~`next.config.ts`: `output: "standalone"`~~
+- [x] ~~`Dockerfile`: multi-stage, Node LTS, non-root user, sharp working, Prisma client generated~~
+- [x] ~~Container start runs `prisma migrate deploy`, then starts the app (needs the Prisma CLI and `prisma.config.ts` in the image)~~
+- [x] ~~`.dockerignore` (`.env`, `node_modules`, `.next`, `public/uploads`)~~
+- [x] ~~Test the image locally against the dev database~~ (pages, R2 photos, cart, admin login, upload via sharp, delete)
 
 ### 3. Build on GitHub instead of the VPS [Claude]
 - [ ] `.github/workflows/deploy.yml`: build the image on push to `main`, push it to GitHub Container Registry (`ghcr.io`), then call Dokploy's deploy webhook
 - Why: `next build` needs 1.5–3 GB RAM and the whole CPU; on KVM 1 it would slow or crash the live site
 
 ### 4. Build without secrets [Claude]
-- [ ] `src/lib/env.ts` validates at import, so `next build` fails without the real variables. Skip the check during the build and keep it at runtime
+- [x] ~~`src/lib/env.ts` validates at import, so `next build` fails without the real variables. Skip the check during the build and keep it at runtime~~ (also `prisma.config.ts` no longer requires `DATABASE_URL` for `prisma generate`)
 
 ### 5. Production seed [Claude]
 - [ ] A production mode that creates only the settings row and the first admin, with no demo products or Unsplash photos
@@ -41,7 +41,7 @@ Plan assumed: KVM 1 (1 vCPU / 4 GB) or KVM 2, Dokploy, photos on Cloudflare R2, 
 ## Phase 2 — Accounts and domain [You]
 
 ### 7. GitHub
-- [ ] Create an empty **private** repo, send the URL, and Claude connects and pushes
+- [x] ~~Create an empty **private** repo, send the URL, and Claude connects and pushes~~ (`github.com/yousefalnaggar/Negm`, branch `main`)
 - [ ] Create a token (read packages) so Dokploy can pull the private image
 
 ### 8. Domain
@@ -114,8 +114,12 @@ Plan assumed: KVM 1 (1 vCPU / 4 GB) or KVM 2, Dokploy, photos on Cloudflare R2, 
 
 ## Decided and done
 
-- [x] **Order history photos**: a stored photo is deleted only when no product, category or past order still uses it
-- [x] **Category photo upload** in the admin category form (pick, preview, save; replacing deletes the old file)
+- [x] ~~**Order history photos**: a stored photo is deleted only when no product, category or past order still uses it~~
+- [x] ~~**Category photo upload** in the admin category form (pick, preview, save; replacing deletes the old file)~~
+- [x] ~~**R2 dev bucket** `negm-dev` with an account API token; all existing photos copied into it and verified~~
+- [x] ~~**Products list**: Edit and Delete buttons on every row~~
+- [x] ~~**Admin counts** under the Orders, Customers, Products and Categories titles~~
+- [x] ~~**Language switch warning** ("Encountered a script tag") fixed~~
 
 ## After launch (not blocking)
 

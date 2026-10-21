@@ -16,7 +16,8 @@
     "skip": "انتقل إلى المحتوى",
     "products": "المنتجات",
     "services": "خدماتنا",
-    "contactWhatsapp": "تواصل معنا"
+    "contactWhatsapp": "تواصل معنا",
+    "search": "بحث"
   },
   "home": {
     "eyebrow": "أثاث مكاتب وجيمنج",
@@ -92,24 +93,44 @@
     "title": "كل الأثاث",
     "count": "{count, plural, =0 {لا توجد قطع} one {قطعة واحدة} two {قطعتان} few {# قطع} many {# قطعة} other {# قطعة}}",
     "empty": "لا يوجد شيء هنا بعد.",
-    "emptyHint": "جرّب قسماً آخر أو امسح البحث.",
+    "emptyHint": "جرّب إزالة أحد الفلاتر أو البحث عن شيء آخر.",
     "all": "الكل",
-    "searchPlaceholder": "ابحث عن كراسي، مكاتب، جيمنج…",
     "searchResults": "نتائج البحث عن «{q}»",
     "filters": "تصفية",
-    "search": "بحث",
     "category": "القسم",
-    "price": "السعر (ج.م)",
+    "price": "السعر",
     "min": "من",
     "max": "إلى",
-    "inStock": "المتوفر فقط",
+    "inStock": "متوفر",
     "sort": "ترتيب حسب",
     "sortFeatured": "المميز",
     "sortNewest": "الأحدث",
     "sortPriceAsc": "السعر: من الأقل للأعلى",
     "sortPriceDesc": "السعر: من الأعلى للأقل",
     "apply": "تطبيق",
-    "clear": "مسح الكل"
+    "clear": "مسح الكل",
+    "anyPrice": "أي سعر",
+    "under": "أقل من {max} ج.م",
+    "between": "من {min} إلى {max} ج.م",
+    "over": "أكثر من {min} ج.م",
+    "customPrice": "نطاق مخصص (ج.م)",
+    "onSale": "عليه خصم",
+    "availability": "التوفر",
+    "showResults": "{count, plural, =0 {لا توجد قطع مطابقة} one {عرض قطعة واحدة} two {عرض قطعتين} few {عرض # قطع} many {عرض # قطعة} other {عرض # قطعة}}",
+    "remove": "إزالة الفلتر: {label}",
+    "noMatch": "لا توجد قطع تطابق هذه الفلاتر."
+  },
+  "search": {
+    "placeholder": "ابحث عن كراسي، مكاتب، جيمنج…",
+    "short": "ابحث في المنتجات",
+    "categories": "الأقسام",
+    "products": "المنتجات",
+    "browse": "تصفّح الأقسام",
+    "seeAll": "{count, plural, one {عرض النتيجة} two {عرض النتيجتين} few {عرض كل الـ # نتائج} many {عرض كل الـ # نتيجة} other {عرض كل الـ # نتيجة}}",
+    "none": "لا توجد نتائج لـ «{q}»",
+    "noneHint": "تأكد من الكتابة، أو تصفّح أحد الأقسام.",
+    "clear": "مسح البحث",
+    "cancel": "إلغاء"
   },
   "product": {
     "addToCart": "أضف إلى السلة",
@@ -274,6 +295,10 @@
       "cta": "اسألنا على واتساب"
     }
   },
+  "pagination": {
+    "label": "الصفحات",
+    "page": "صفحة {page}"
+  },
   "footer": {
     "tagline": "أثاث مكاتب وجيمنج بتوصيل لكل مصر.",
     "shop": "تسوق",
@@ -309,11 +334,7 @@
     },
     "ordersPage": {
       "all": "الكل",
-      "search": "رقم الطلب أو الموبايل أو الاسم",
-      "from": "من",
-      "to": "إلى",
-      "filter": "تصفية",
-      "clear": "مسح",
+      "search": "ابحث برقم الطلب أو الموبايل أو الاسم",
       "order": "الطلب",
       "customer": "العميل",
       "date": "التاريخ",
@@ -333,9 +354,7 @@
       "cancelConfirm": "إلغاء هذا الطلب وإرجاع المنتجات للمخزون؟",
       "print": "طباعة إيصال التغليف",
       "back": "كل الطلبات",
-      "packingSlip": "إيصال التغليف",
-      "prev": "السابق",
-      "next": "التالي"
+      "packingSlip": "إيصال التغليف"
     },
     "productsPage": {
       "new": "منتج جديد",
@@ -375,10 +394,11 @@
       "moveDown": "تأخير",
       "removeImage": "حذف الصورة",
       "saveFirst": "احفظ المنتج أولاً ثم أضف الصور.",
-      "search": "ابحث في المنتجات",
+      "search": "ابحث باسم المنتج",
       "editShort": "تعديل",
       "deleteShort": "حذف",
-      "actions": "إجراءات"
+      "actions": "إجراءات",
+      "noMatch": "لا توجد منتجات تطابق البحث."
     },
     "categoriesPage": {
       "add": "إضافة قسم",
@@ -402,7 +422,7 @@
     },
     "customers": "العملاء",
     "customersPage": {
-      "search": "الاسم أو الموبايل",
+      "search": "ابحث بالاسم أو الموبايل",
       "name": "العميل",
       "phone": "الموبايل",
       "orders": "الطلبات",
@@ -411,14 +431,18 @@
       "firstOrder": "أول طلب",
       "lastOrder": "آخر طلب",
       "empty": "لا يوجد عملاء بعد.",
-      "filter": "بحث",
-      "clear": "مسح"
+      "noMatch": "لا يوجد عملاء يطابقون البحث."
     },
     "counts": {
       "orders": "{count, plural, =0 {لا توجد طلبات} one {طلب واحد} two {طلبان} few {# طلبات} many {# طلب} other {# طلب}}",
       "customers": "{count, plural, =0 {لا يوجد عملاء} one {عميل واحد} two {عميلان} few {# عملاء} many {# عميل} other {# عميل}}",
       "products": "{count, plural, =0 {لا توجد منتجات} one {منتج واحد} two {منتجان} few {# منتجات} many {# منتج} other {# منتج}}",
       "categories": "{count, plural, =0 {لا توجد أقسام} one {قسم واحد} two {قسمان} few {# أقسام} many {# قسم} other {# قسم}}"
+    },
+    "filters": {
+      "from": "من",
+      "to": "إلى",
+      "clear": "مسح الفلاتر"
     }
   }
 }

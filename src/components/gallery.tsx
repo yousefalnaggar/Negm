@@ -22,13 +22,13 @@ export function Gallery({ images, alt }: { images: Img[]; alt: string }) {
         />
       </div>
       {images.length > 1 && (
-        <div className="flex gap-3 overflow-x-auto">
+        <div className="grid grid-cols-5 gap-2 sm:gap-3">
           {images.map((img, i) => (
             <button
               key={img.url}
               type="button"
               onClick={() => setActive(i)}
-              className={`size-20 shrink-0 overflow-hidden rounded-xl border-2 transition-colors ${i === active ? "border-ink" : "border-transparent opacity-70 hover:opacity-100"}`}
+              className={`aspect-square overflow-hidden rounded-xl border-2 transition-colors ${i === active ? "border-ink" : "border-transparent opacity-70 hover:opacity-100"}`}
               aria-label={`${alt} ${i + 1}`}
               aria-current={i === active}
             >
