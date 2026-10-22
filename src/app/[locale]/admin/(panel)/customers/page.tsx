@@ -1,30 +1,13 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ExportMenu } from "@/components/admin/export-menu";
 import { ListFilters } from "@/components/admin/list-filters";
 import { PageHeader } from "@/components/admin/ui";
 import { Pagination } from "@/components/pagination";
-import { Prisma } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
+import { ADMIN_PAGE_SIZE as PAGE_SIZE, customerCount, customerRows, readCustomerFilters } from "@/lib/admin-lists";
 import { requireAdmin } from "@/lib/auth";
-import { db } from "@/lib/db";
 import { governorateName } from "@/lib/governorates";
 import { formatDate, formatPrice } from "@/lib/money";
-import { normalizeDigits } from "@/lib/normalize";
-
-const PAGE_SIZE = 24;
-
-type CustomerRow = {
-  phone: string;
-  name: string;
-  governorate: string;
-  orders: number;
-  spent: bigint;
-  first: Date;
-  last: Date;
-};
-
-function str(v: string | string[] | undefined) {
-  return typeof v === "string" ? v.trim().slice(0, 100) : "";
-}
 
 /** Customers are guests, so they're grouped by phone number across their orders. */
 export default async function CustomersPage({ params, searchParams }: PageProps<"/[locale]/admin/customers">) {
@@ -33,29 +16,13 @@ export default async function CustomersPage({ params, searchParams }: PageProps<
   await requireAdmin();
 
   const sp = await searchParams;
-  const q = normalizeDigits(str(sp.q));
-  const page = Math.max(1, Number(str(sp.page)) || 1);
-  const digits = q.replace(/\D/g, "");
-  const where = q
-    ? Prisma.sql`WHERE "customerName" ILIKE ${`%${q}%`} ${digits ? Prisma.sql`OR phone LIKE ${`%${digits}%`}` : Prisma.empty}`
-    : Prisma.empty;
+  const { q, page, where } = readCustomerFilters(sp);
 
-  const [t, tAdmin, rows, [{ total }]] = await Promise.all([
+  const [t, tAdmin, rows, total] = await Promise.all([
     getTranslations("admin.customersPage"),
     getTranslations("admin"),
-    db.$queryRaw<CustomerRow[]>`
-      SELECT phone,
-        (array_agg("customerName" ORDER BY "createdAt" DESC))[1] AS name,
-        (array_agg(governorate ORDER BY "createdAt" DESC))[1] AS governorate,
-        COUNT(*)::int AS orders,
-        COALESCE(SUM(total) FILTER (WHERE status <> 'CANCELLED'), 0)::bigint AS spent,
-        MIN("createdAt") AS first,
-        MAX("createdAt") AS last
-      FROM "Order" ${where}
-      GROUP BY phone
-      ORDER BY last DESC, phone
-      LIMIT ${PAGE_SIZE} OFFSET ${(page - 1) * PAGE_SIZE}`,
-    db.$queryRaw<{ total: number }[]>`SELECT COUNT(DISTINCT phone)::int AS total FROM "Order" ${where}`,
+    customerRows(where, page),
+    customerCount(where),
   ]);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const pageHref = (p: number) => {
@@ -65,7 +32,9 @@ export default async function CustomersPage({ params, searchParams }: PageProps<
 
   return (
     <>
-      <PageHeader title={tAdmin("customers")} count={tAdmin("counts.customers", { count: total })} />
+      <PageHeader title={tAdmin("customers")} count={tAdmin("counts.customers", { count: total })}>
+        <ExportMenu list="customers" onPage={rows.length} total={total} />
+      </PageHeader>
 
       <ListFilters placeholder={t("search")}>
         <div className="card">

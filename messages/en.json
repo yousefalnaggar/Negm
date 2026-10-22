@@ -443,6 +443,30 @@
       "from": "From",
       "to": "To",
       "clear": "Clear filters"
+    },
+    "export": {
+      "button": "Export",
+      "thisPage": "This page",
+      "all": "All results",
+      "hint": "CSV file, opens in Excel. Uses the current search and filters.",
+      "number": "Order #",
+      "date": "Date",
+      "status": "Status",
+      "customer": "Customer",
+      "phone": "Phone",
+      "email": "Email",
+      "governorate": "Governorate",
+      "city": "City",
+      "address": "Address",
+      "notes": "Notes",
+      "items": "Items",
+      "subtotal": "Subtotal (EGP)",
+      "shipping": "Shipping (EGP)",
+      "total": "Total (EGP)",
+      "orders": "Orders",
+      "spent": "Total spent (EGP)",
+      "firstOrder": "First order",
+      "lastOrder": "Last order"
     }
   }
 }
