@@ -1,7 +1,8 @@
 // Dev only: fills the database with fake products, customers and orders for testing.
 // Rows are tagged (product slug and order idempotencyKey start with "test-") so they can be removed.
-// Usage: npx tsx scripts/fake-data.ts          add 100 products + 100 customers/orders
-//        npx tsx scripts/fake-data.ts --clean  remove everything this script added
+// Usage: npx tsx scripts/fake-data.ts           add 100 products + 100 customers/orders
+//        npx tsx scripts/fake-data.ts --orders  add 100 customers/orders from the existing products
+//        npx tsx scripts/fake-data.ts --clean   remove everything this script added
 import "dotenv/config";
 import { randomBytes } from "node:crypto";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -40,12 +41,9 @@ async function clean() {
   console.log(`removed ${orders.count} orders and ${products.count} products`);
 }
 
-async function main() {
-  if (process.argv.includes("--clean")) return clean();
-
+/** 100 test products without photos, spread over the existing categories. */
+async function addProducts(tag: string) {
   const categories = await db.category.findMany();
-  const tag = randomBytes(3).toString("hex");
-
   const productRows = Array.from({ length: 100 }, (_, i) => {
     const category = pick(categories);
     const [typeAr, typeEn] = pick(TYPES[category.slug] ?? [["قطعة", "Piece"]]);
@@ -69,8 +67,19 @@ async function main() {
     };
   });
   await db.product.createMany({ data: productRows });
-  const products = await db.product.findMany({ where: { slug: { startsWith: `test-${tag}-` } } });
+  const products = await db.product.findMany({ where: { slug: { startsWith: `test-${tag}-` } }, include: { images: true } });
   console.log(`added ${products.length} products`);
+  return products;
+}
+
+async function main() {
+  if (process.argv.includes("--clean")) return clean();
+
+  const tag = randomBytes(3).toString("hex");
+  const products = process.argv.includes("--orders")
+    ? await db.product.findMany({ where: { active: true }, include: { images: { orderBy: { position: "asc" }, take: 1 } } })
+    : await addProducts(tag);
+  if (!products.length) throw new Error("no products to order");
 
   const settings = await db.setting.findUnique({ where: { id: 1 } });
   const shippingFee = settings?.shippingFee ?? 15000;
@@ -80,7 +89,8 @@ async function main() {
     const lines = Array.from({ length: between(1, 3) }, () => pick(products));
     const items = [...new Map(lines.map((p) => [p.id, p])).values()].map((p) => {
       const quantity = between(1, 2);
-      return { productId: p.id, nameAr: p.nameAr, nameEn: p.nameEn, unitPrice: p.price, quantity, lineTotal: p.price * quantity };
+      const imageKey = p.images[0]?.key ?? null; // kept on the order, like a real checkout
+      return { productId: p.id, nameAr: p.nameAr, nameEn: p.nameEn, imageKey, unitPrice: p.price, quantity, lineTotal: p.price * quantity };
     });
     const subtotal = items.reduce((sum, x) => sum + x.lineTotal, 0);
     const name = `${pick(FIRST)} ${pick(LAST)}`;
