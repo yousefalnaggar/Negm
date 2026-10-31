@@ -1,6 +1,6 @@
 # NEGM: Bilingual E-commerce Platform
 
-[![CI](https://github.com/yousefalnaggar/Negm/actions/workflows/ci.yml/badge.svg)](https://github.com/yousefalnaggar/Negm/actions/workflows/ci.yml)
+[![CI](https://github.com/yousefalnaggar/Negm/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/yousefalnaggar/Negm/actions/workflows/ci.yml)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs)
 ![React 19](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
