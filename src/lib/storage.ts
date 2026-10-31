@@ -13,7 +13,7 @@ if (r2Vars.some(Boolean) && !r2Vars.every(Boolean)) {
   throw new Error("Set all of R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY and R2_BUCKET, or none of them.");
 }
 
-export const r2 = R2_BUCKET
+const r2 = R2_BUCKET
   ? new S3Client({
       region: "auto",
       endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
